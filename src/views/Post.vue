@@ -6,18 +6,22 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   name: 'Post',
-  data() {
-    return {
-      post: {},
-    }
+  computed: {
+    ...mapGetters([
+      'post',
+    ]),
+  },
+  methods: {
+    ...mapActions([
+      'getPost',
+    ]),
   },
   created: async function() {
-    this.post = await fetch(`https://jsonplaceholder.typicode.com/posts/${this.$route.params.postId}`);
-    this.post = await this.post.json();
-
-    console.log(this.post);
-  }
+    this.getPost(this.$route.params.postId);
+  },
 }
 </script>

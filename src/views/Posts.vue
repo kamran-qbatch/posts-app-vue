@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <ul>
-      <li v-for="post in this.posts" v-bind:key="post.id">
+      <li v-for="post in this.allPosts" v-bind:key="post.id">
         <router-link :to="{ name: 'Post', params: { postId: post.id } }">{{ post.title }}</router-link>
       </li>
     </ul>
@@ -10,25 +10,27 @@
 
 <style lang="scss">
 li {
-  border: 2px solid #ccc;
-  padding: 10px;
   margin-bottom: 10px;
 }
 </style>
 
 <script>
-// @ is an alias to /src
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Posts',
-  data() {
-    return {
-      posts: [],
-    }
+  computed: {
+    ...mapGetters([
+      'allPosts',
+    ]),
   },
-  created: async function() {
-    this.posts = await fetch('https://jsonplaceholder.typicode.com/posts');
-    this.posts = await this.posts.json();
+  methods: {
+    ...mapActions([
+      'getAllPosts',
+    ]),
+  },
+  created: function() {
+    this.allPosts.length === 0 && this.getAllPosts();
   },
 }
 </script>
